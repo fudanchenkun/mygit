@@ -1,0 +1,89 @@
+{% load static %}
+<!--<!DOCTYPE html>-->
+<html>
+<head>
+<meta charset="UTF-8">
+<title>KunSearch</title>
+  <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/semantic.js' %}"></script>
+</head>
+<body>
+<!-- YOUR CODE -->
+  <div class="ui divider"></div>
+
+  <div class="ui container"  >
+
+    <div class="ui three item menu">
+    <a class="item" href="/index/">投标</a>
+    <a class="active item">新闻</a>
+    <a class="item">历史产品</a>
+    </div>
+
+  </div>
+  <br>
+  <div class="ui container">
+
+    <div class="ui form" name="searchForm" >
+
+      <form class="ui form" action="/news/" method="get">
+        <div class="ui action input">
+          <input placeholder="Big Star" name="keywords" type="text" value="{{keywords}}">
+          <!--<in class="ui button" name="search" type="submit">搜索</in>-->
+          <!--<input type="submit" value="搜索">-->
+          <button class="ui button" type="submit">搜索</button>
+        </div>
+
+
+      </form>
+
+    </div>
+
+
+  </div>
+
+  <div class="ui container segment">
+
+    <div class="ui divided items">
+    {% for item in info %}
+    <div class="item">
+      <!--<div class="image">-->
+        <!--<img src="/images/wireframe/image.png">-->
+      <!--</div>-->
+      <div class="content">
+          <a class="itemtitle" href="{{ item.news_url }}" target="_blank">{{item.page_title}}</a>
+
+          <div class="partcontent">
+            <span>{{ item.news_part }}</span>
+          </div>
+
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+
+    <div class="ui pagination menu">
+      {% if info.has_previous %}
+        <a class="item" href="?page={{ info.previous_page_number}}&keywords={{keywords}}"><'上一页</a>
+      {% endif %}
+      <div class="item"> 第{{ info.number}}页 共{{info.paginator.num_pages}}页</div>
+      {% if info.has_next %}
+        <a class="item" href="?page={{ info.next_page_number }}&keywords={{keywords}}">下一页></a>
+      {% endif %}
+    </div>
+
+  </div>
+
+
+<script>
+  $('#search').click(function(){
+    var str=searchText.value
+
+  });
+  function test(){
+
+    alert("test");
+  };
+</script>
+</body>
+</html>

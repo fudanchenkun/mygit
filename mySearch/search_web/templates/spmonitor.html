@@ -1,0 +1,289 @@
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>爬虫监控系统</title>
+  <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/semantic.js' %}"></script>
+  <script src="{% static 'js/echarts.min.js' %}"></script>
+</head>
+<body>
+<div class="ui container">
+  <div class="ui two column  grid"  >
+
+    <div class="column" name="left">
+        <br>
+        <div class="ui container">
+    <div class="ui statistic">
+        <div class="label">当日监测数据：</div>
+    </div>
+    <div class="ui container">
+        <div class="ui statistic">
+          <div class="value" id="sdelay_label">{{ spiderDelay }}</div>
+          <div class="label">爬虫延迟(秒)</div>
+        </div>
+        <div class="ui statistic">
+          <div class="value" id="rdelay_label">{{ runDelay }}</div>
+          <div class="label">实时间隔(秒)</div>
+        </div>
+        <div class="ui statistic">
+          <div class="value" id="daytimes">1,021</div>
+          <div class="label">网贷平台实时请求次数</div>
+        </div>
+    </div>
+    </div>
+    <h2 class="ui dividing header"></h2>
+        <div class="ui container">
+            <div id="reqecharts" style="width: 600px;height:400px;"></div>
+            <button class="ui button" id="runspider">运行爬虫 </button>
+            <div id="reqfresh">
+
+                <span> 刷新表</span>
+                <i class="Refresh icon"></i>
+            </div>
+        </div>
+    <h2 class="ui dividing header"></h2>
+        <div class="ui container" id="wenti">
+            <div class="ui statistic">
+                <div class="label">问题检测：</div>
+            </div>
+            <div>
+                <button class="ui button" id="wt-show">刷新 </button>
+                <button class="ui button" id="wt-clean">清空 </button>
+            </div>
+            <div class="ui form" >
+                <div class="ui bottom attached segment" id="wt-text">
+
+                </div>
+              <!--<div class="field" >-->
+                <!--<textarea></textarea>-->
+              <!--</div>-->
+            </div>
+        </div>
+
+    <h2 class="ui dividing header"></h2>
+        <div class="ui container" id="setting">
+            <div class="ui statistic">
+                <div class="label">爬虫设定：</div>
+            </div>
+        <div class="ui form" >
+
+          <div class="fields">
+            <div class="field">
+              <label>每页爬取时间间隔</label>
+              <input type="text" placeholder="" id="input_spdelay">
+            </div>
+            <div class="field">
+              <label>实时运行间隔</label>
+              <input type="text" placeholder="" id="input_rundelay">
+             </div>
+            <div class="field">
+              <label>设置连接超时</label>
+              <input type="text" placeholder="" id="input_timeout">
+            </div>
+          </div>
+            <button class="ui button" id="setsubmit">提交 </button>
+        </div>
+        </div>
+
+    <h2 class="ui dividing header"></h2>
+        <div class="ui container" id="ipcl">
+            <div class="ui statistic">
+                <div class="label">代理IP处理：</div>
+            </div>
+            <div>
+                <!--<button class="ui button">清除下列代理IP </button>-->
+                <button class="ui button" id="agentfresh">更新代理IP </button>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="column" name="right">
+    <br>
+    <div class="ui form">
+        <label> 网贷平台</label>
+        <select class="ui search dropdown" id="wdSelect">
+          <option value="">网贷平台</option>
+          <option value="PaiPaiDai">拍拍贷</option>
+          <option value="RenRenDai">人人贷</option>
+          <option value="LanTouZi">懒投资</option>
+          <option value="WeiDai">微贷网</option>
+          <option value="LuJinSuo">陆金所</option>
+        </select>
+
+        <button class="ui button" id="spidertest">测试 </button>
+        <button class="ui button" id="tempty">清空测试数据 </button>
+
+    </div>
+    <br>
+
+    <div class="ui container">
+        <div class="ui top attached tabular menu" id="listres">
+          <a class="active item">测试数据</a>
+        </div>
+        <div class="ui bottom attached active tab segment" id="list_result">
+
+        </div>
+    </div>
+
+
+    </div>
+
+  </div>
+  <br>
+    <div></div>
+  <!--<div class="ui styled fluid accordion">-->
+      <!--<div class="title"><i class="dropdown icon"></i> What is a dog? </div>-->
+      <!--<div class="content">-->
+        <!--<p class="transition hidden">A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>-->
+      <!--</div>-->
+      <!--<div class="title"><i class="dropdown icon"></i> What kinds of dogs are there? </div>-->
+      <!--<div class="content">-->
+        <!--<p>There are many breeds of dogs. Each breed varies in size and temperament. Owners often select a breed of dog that they find to be compatible with their own lifestyle and desires from a companion.</p>-->
+      <!--</div>-->
+      <!--<div class="title"><i class="dropdown icon"></i> How do you acquire a dog? </div>-->
+      <!--<div class="content">-->
+        <!--<p>Three common ways for a prospective owner to acquire a dog is from pet shops, private owners, or shelters.</p>-->
+        <!--<p>A pet shop may be the most convenient way to buy a dog. Buying a dog from a private owner allows you to assess the pedigree and upbringing of your dog before choosing to take it home. Lastly, finding your dog from a shelter, helps give a good home to a dog who may not find one so readily.</p>-->
+      <!--</div>-->
+    <!--</div>-->
+</div>
+<script>
+    $('#runspider').click(function(){
+        $.get("{% url 'spider_run' %}",{},function(){
+
+        })
+    })
+</script>
+<script>
+$(document).ready(function(){
+    $('#setsubmit').click(function(){
+        var p1=document.getElementById("input_spdelay").value;
+        var p2=document.getElementById("input_rundelay").value;
+        var p3=document.getElementById("input_timeout").value;
+
+        $("#sdelay_label").empty();
+        $.get("{% url 'xml-alter' %}",{"p1":p1,"p2":p2,"p3":p3},function(ret){
+            $("#sdelay_label").empty();
+            $("#sdelay_label").append('<div>'+p1+'</div>');
+            $("#rdelay_label").empty();
+            $("#rdelay_label").append('<div>'+p2+'</div>');
+        });
+    });
+})
+</script>
+<script name="echarts" type="text/javascript">
+$('#reqfresh').click(function(){
+    $.getJSON("{% url 'echarts-req' %}",function(data){
+        myChart.setOption({
+            xAxis: {
+                data: data.platform
+            },
+            series: [{
+                // 根据名字对应到相应的系列
+                name:'网页数',
+                data: data.percent
+            }]
+        });
+    })
+});
+var myChart = echarts.init(document.getElementById('reqecharts'));
+// 显示标题，图例和空的坐标轴
+myChart.setOption({
+    title: {
+        text: '各网贷平台实时爬取效率'
+    },
+    tooltip: {},
+    legend: {
+        data:['百分比']
+    },
+    xAxis: {
+        data: []
+    },
+    yAxis: {},
+    series: [{
+        name: '百分比',
+        type: 'bar',
+        data: []
+    }]
+});
+$.getJSON("{% url 'echarts-req' %}",function(data){
+    myChart.setOption({
+        xAxis: {
+            data: data.platform
+        },
+        series: [{
+            // 根据名字对应到相应的系列
+            name:'网页数',
+            data: data.count_req
+        }]
+    });
+})
+</script>
+<script>
+$(document).ready(function(){
+  // 列表 list
+  $('#spidertest').click(function(){
+      var pt=document.getElementById("wdSelect").value;
+      $.getJSON("{% url 'sp-test' %}",{"pt":pt,},function(ret){
+        //返回值 ret 在这里是一个列表
+        if (jQuery.isEmptyObject(ret)){
+        mark=true;
+        }
+        else{
+              $('#list_result').empty();
+              for (var i = ret.length - 1; i >= 0; i--) {
+              // 把 ret 的每一项显示在网页上
+              $('#list_result').append('<p>' +ret[i]+'</p>')
+              <!--for (var j=ret[i].length-1;j>=0;j&#45;&#45;){-->
+                <!--$('#list_result').append('<div>' +ret[i][j]+'</div>')-->
+              <!--}-->
+            };
+        }
+      })
+  })
+});
+</script>
+<script name="other">
+$('.ui.menu .item')
+  .tab()
+;
+$('#tempty').click(function(){
+    $('#list_result').empty();
+});
+$('.tabular.menu .item').tab();
+$('.url.example .ui.embed').embed();
+$('.ui.accordion')
+  .accordion()
+;
+$('select.dropdown')
+  .dropdown()
+;
+</script>
+<script name="scr-error">
+
+    $('#wt-show').click(function(){
+        $.getJSON("{% url 'error-platform' %}",{},function(data){
+            $('#wt-text').empty();
+            <!--$('#wt-text').append(data)-->
+            for(var i=data.length-1;i>=0;i--){
+                $('#wt-text').append('<p>'+data[i]+'</p>')
+            }
+        })
+    });
+    $('#wt-clean').click(function(){
+        $('#wt-text').empty();
+    });
+
+</script>
+<script name="agent">
+$('#agentfresh').click(function(){
+    $.get("{% url 'agent-fresh' %}",{},function(){
+
+    })
+})
+</script>
+</body>
+</html>

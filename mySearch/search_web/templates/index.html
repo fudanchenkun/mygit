@@ -1,0 +1,274 @@
+{% load static %}
+<html>
+<head>
+<meta charset="UTF-8">
+<title>KunSearch</title>
+  <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/semantic.js' %}"></script>
+</head>
+<body>
+<!-- YOUR CODE -->
+  <div class="ui divider"></div>
+
+  <div class="ui container"  >
+
+    <div class="ui three item menu">
+    <a class="active item">投标</a>
+    <a class="item" href="/news/" >新闻</a>
+    <a class="item">历史产品</a>
+    </div>
+
+  </div>
+  <br>
+  <div class="ui container">
+
+    <div class="ui form" name="searchForm" >
+
+      <form class="ui form" action="/index/" method="get">
+        <div class="ui action input">
+          <input placeholder="Big Star" name="keywords" type="text" value="{{keywords}}">
+          <!--<in class="ui button" name="search" type="submit">搜索</in>-->
+          <!--<input type="submit" value="搜索">-->
+          <button class="ui button" type="submit">搜索</button>
+        </div>
+
+        <div class="inline fields">
+          <label>投标金额</label>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if sum == '0' %}
+              <input name="sum" checked="checked" type="radio" value="0">
+              {% else %}
+              <input name="sum"  type="radio" value="0">
+              {% endif %}
+              <label>全部</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if sum == '1' %}
+              <input name="sum" checked="checked" type="radio" value="1">
+              {% else %}
+              <input name="sum"  type="radio" value="1">
+              {% endif %}
+              <label>0-1万</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if sum == '2' %}
+              <input name="sum" checked="checked" type="radio" value="2">
+              {% else %}
+              <input name="sum"  type="radio" value="2">
+              {% endif %}
+              <label>1-10万</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if sum == '3' %}
+              <input name="sum" checked="checked" type="radio" value="3">
+              {% else %}
+              <input name="sum"  type="radio" value="3">
+              {% endif %}
+              <label>10-20万</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if sum == '4' %}
+              <input name="sum" checked="checked" type="radio" value="4">
+              {% else %}
+              <input name="sum"  type="radio" value="4">
+              {% endif %}
+              <label>20-50万</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if sum == '5' %}
+              <input name="sum" checked="checked" type="radio" value="5">
+              {% else %}
+              <input name="sum"  type="radio" value="5">
+              {% endif %}
+              <label>50万以上</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="inline fields">
+          <label>借款期限</label>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if timelong == '0' %}
+              <input name="timelong" checked="checked" type="radio" value="0">
+              {% else %}
+              <input name="timelong" type="radio" value="0">
+              {% endif %}
+              <label>全部</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if timelong == '1' %}
+              <input name="timelong" checked="checked" type="radio" value="1">
+              {% else %}
+              <input name="timelong" type="radio" value="1">
+              {% endif %}
+              <label>1个月之内</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if timelong == '2' %}
+              <input name="timelong" checked="checked" type="radio" value="2">
+              {% else %}
+              <input name="timelong" type="radio" value="2">
+              {% endif %}
+              <label>2-6个月</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if timelong == '3' %}
+              <input name="timelong" checked="checked" type="radio" value="3">
+              {% else %}
+              <input name="timelong" type="radio" value="3">
+              {% endif %}
+              <label>7-12个月</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if timelong == '4' %}
+              <input name="timelong" checked="checked" type="radio" value="4">
+              {% else %}
+              <input name="timelong" type="radio" value="4">
+              {% endif %}
+              <label>1年以上</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="inline fields">
+          <label>年化利率</label>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if rate == '0' %}
+              <input name="rate" checked="checked" type="radio" value="0">
+              {% else %}
+              <input name="rate" type="radio" value="0">
+              {% endif %}
+              <label>全部</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox" >
+              {% if rate == '1' %}
+              <input name="rate" checked="checked" type="radio" value="1">
+              {% else %}
+              <input name="rate" type="radio" value="1">
+              {% endif %}
+              <label>5%-10%</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if rate == '2' %}
+              <input name="rate" checked="checked" type="radio" value="2">
+              {% else %}
+              <input name="rate" type="radio" value="2">
+              {% endif %}
+              <label>11%-15%</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if rate == '3' %}
+              <input name="rate" checked="checked" type="radio" value="3">
+              {% else %}
+              <input name="rate" type="radio" value="3">
+              {% endif %}
+              <label>16%-20%</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              {% if rate == '4' %}
+              <input name="rate" checked="checked" type="radio" value="4">
+              {% else %}
+              <input name="rate" type="radio" value="4">
+              {% endif %}
+              <label>20%以上</label>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </div>
+
+
+  </div>
+
+  <div class="ui container segment">
+
+    <div class="ui divided items">
+    {% for item in info %}
+    <div class="item">
+      <div class="image">
+        <span>{{item.platform}}</span>
+        <!--<img src="/images/wireframe/image.png">-->
+      </div>
+      <div class="content">
+      <a class="itemtitle" href="{{ item.url }}" target="_blank">{{item.title}}</a>
+
+      <div class="heatvalue">
+        热度：<span>{{ item.heatvalue}}</span>
+      </div>
+      <div class="itemsum">
+        <p>金额：{{item.sum}}元</p>
+      </div>
+      <div class="itemtime">
+        <p>期限：{{item.limittime}}个月</p>
+      </div>
+      <div class="itemrate">
+        <p>利率：{{item.rate}}%</p>
+      </div>
+      <div class="process">
+        <p>进度：{{item.process}}%</p>
+      </div>
+        <div class="description">
+        <p>{{ item.decription }}</p>
+      </div>
+      <div class="extra">{{ item.url }}</div>
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+
+    <div class="ui pagination menu">
+      {% if info.has_previous %}
+        <a class="item" href="?page={{ info.previous_page_number}}&keywords={{keywords}}&sum={{sum}}&timelong={{timelong}}&rate={{rate}}"><上一页</a>
+      {% endif %}
+      <div class="item"> 第{{ info.number}}页 共{{info.paginator.num_pages}}页</div>
+      {% if info.has_next %}
+        <a class="item" href="?page={{ info.next_page_number }}&keywords={{keywords}}&sum={{sum}}&timelong={{timelong}}&rate={{rate}}">下一页></a>
+      {% endif %}
+    </div>
+
+  </div>
+
+
+<script>
+  $('#search').click(function(){
+    var str=searchText.value
+
+  });
+  function test(){
+
+    alert("test");
+  };
+</script>
+</body>
+</html>
