@@ -13,6 +13,7 @@ class P2P(object):
     def __init__(self):
         self.rootpath = '/home/chenkun/p2pdata/'
         self.headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36'}
+        self.coninfo = "psql -h 127.0.0.1 -p 5432 -U user -d databasename"
         self.proxies = {'http': 'http://182.90.252.10:2226'}
         self.count_req = 0
         self.count_suc = 0
@@ -46,22 +47,21 @@ class P2P(object):
 
     def writetoDB_list(self):
         # list信息
-        coninfo = "psql -h 127.0.0.1 -p 5432 -U kun -d p2p"
+
         csvpath = self.rootpath + 'wdlist/db_bidlist.csv'
         os_ex1 = '''cat $path | $count -c "copy $table (title,platform,url,sum,
         limittime,rate,process,peoplenum,heatvalue,decription,indexsum,indextime,indexrate)
         from stdin delimiter ',';" ;'''
         os_ex1 = Template(os_ex1)
-        os.system(os_ex1.substitute(path=csvpath, count=coninfo, table='list_source'))
+        os.system(os_ex1.substitute(path=csvpath, count=self.coninfo, table='list_source'))
 
     def writetoDB_monitor(self):
         # 监控信息
-        coninfo = "psql -h 127.0.0.1 -p 5432 -U kun -d p2p"
         csvpath = self.rootpath + 'wdlist/db_monitor.csv'
         os_ex2 = '''cat $path | $count -c "copy $table (platform,count_req,count_suc)
         from stdin delimiter ',';";'''
         os_ex2 = Template(os_ex2)
-        os.system(os_ex2.substitute(path=csvpath, count=coninfo, table='sp_reqinfo'))
+        os.system(os_ex2.substitute(path=csvpath, count=self.coninfo, table='sp_reqinfo'))
 
     def clandtocsv(self, pagenums=50, tlock=None, mlock=None,elock=None):
         bidlist,iserror = self.spider(pagenums)
@@ -441,7 +441,6 @@ class LuJinSuo(P2P):
 
         return bidList,error
 
-
 class LanTouZi(P2P):
     def pagelist(self,soup):
         bidlist = []
@@ -513,7 +512,7 @@ class LanTouZi(P2P):
                         print onepage
                         continue
                 # -----------------------change------------------------------
-                # nextPage = "https://lantouzi.com/bianxianjihua/index?page=&size=14          "
+                # nextPage = "https://lantouzi.com/bianxianjihua/index?page=&size=14\00\00\00\00\00\00\00\00\00\00"
                 print 'c:',c
                 nextPage = "https://lantouzi.com/bianxianjihua/index?page="+str(c)+"&size=14"
                 print 'nextpage：',nextPage
@@ -523,7 +522,6 @@ class LanTouZi(P2P):
 
 
 def runmain():
-    coninfo = "psql -h 127.0.0.1 -p 5432 -U kun -d p2p"
     threads = []
     tempfilelock = threading.Lock()
     errorfilelock=threading.Lock()
@@ -545,14 +543,14 @@ def runmain():
 
     # 清空list_source,bidlist写入数据库表list_source
     os_Truncate = Template('''$count -c "Truncate table $table;"''')
-    os.system(os_Truncate.substitute(count=coninfo, table='sp_reqinfo'))
+    os.system(os_Truncate.substitute(count=ppd.coninfo, table='sp_reqinfo'))
     ppd.writetoDB_monitor()
     # 清空sp_reqinfo,监控信息写入数据库表sp_reqinfo
-    os.system(os_Truncate.substitute(count=coninfo, table='list_source'))
+    os.system(os_Truncate.substitute(count=ppd.coninfo, table='list_source'))
     ppd.writetoDB_list()
 
     # 更新list
-    os.system(os_Truncate.substitute(count=coninfo, table='list'))  # 清空list
+    os.system(os_Truncate.substitute(count=ppd.coninfo, table='list'))  # 清空list
     os_ex2 = '''$count -c "insert into $table2(id,title,platform,url,sum,limittime,rate,
     process,peoplenum,heatvalue,decription,indexsum,indextime,indexrate,document)
     select $table1.*,
@@ -560,10 +558,10 @@ def runmain():
     setweight(to_tsvector('testzhcfg',list_source.decription),'B') as document
     from $table1;"'''
     os_ex2 = Template(os_ex2)
-    os.system(os_ex2.substitute(count=coninfo, table2='list', table1='list_source'))  # 插入list
+    os.system(os_ex2.substitute(count=ppd.coninfo, table2='list', table1='list_source'))  # 插入list
     # 删除零时文件
-    os.system('rm {0}'.format('/home/chenkun/p2pdata/wdlist/db_bidlist.csv'))
-    os.system('rm {0}'.format('/home/chenkun/p2pdata/wdlist/db_monitor.csv'))
+    os.system('rm {0}'.format(ppd.rootpath+'wdlist/db_bidlist.csv'))
+    os.system('rm {0}'.format(ppd.rootpath+'wdlist/db_monitor.csv'))
 
 if __name__ == '__main__':
     runcounts=0
